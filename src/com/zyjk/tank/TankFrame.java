@@ -5,6 +5,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.security.cert.CollectionCertStoreParameters;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Auther: lzw
@@ -13,11 +16,21 @@ import java.awt.event.WindowEvent;
  * @version: 1.0
  */
 public class TankFrame extends Frame {
+    private static final int GAME_WIDTH = 800;
+    private static final int GAME_HEIGHT = 600;
+    Tank myTank = new Tank(200,200,Dir.DOWN,this);
+    List<Bullet> bullets = new ArrayList<>();
 
-    Tank myTank = new Tank(200,200,Dir.DOWN);
+    public static int getGameWidth() {
+        return GAME_WIDTH;
+    }
+
+    public static int getGameHeight() {
+        return GAME_HEIGHT;
+    }
 
     public TankFrame(){
-        setSize(800,600);
+        setSize(GAME_WIDTH,GAME_HEIGHT);
         setResizable(false);
         setTitle("tank war");
         setVisible(true);
@@ -30,9 +43,38 @@ public class TankFrame extends Frame {
         });
     }
 
+    Image offScreenImage = null;
+    @Override
+    public void update(Graphics g) {
+        if (offScreenImage == null) {
+            offScreenImage = this.createImage(GAME_WIDTH, GAME_HEIGHT);
+        }
+        Graphics gOffScreen = offScreenImage.getGraphics();
+        Color c = gOffScreen.getColor();
+        gOffScreen.setColor(Color.BLACK);
+        gOffScreen.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        gOffScreen.setColor(c);
+        paint(gOffScreen);
+        g.drawImage(offScreenImage, 0, 0, null);
+    }
+
     @Override
     public void paint(Graphics g) {
         myTank.paint(g);
+//        for (Bullet b : bullets){
+//            b.paint(g);
+//        }
+
+        for (int i=0; i<bullets.size();i++){
+            bullets.get(i).paint(g);
+        }
+
+        Color color = g.getColor();
+        g.setColor(Color.white);
+        g.drawString("当前子弹数:"+bullets.size(),10,60);
+        g.setColor(color);
+
+
     }
 
     class MyKeyListener extends KeyAdapter{
@@ -80,6 +122,8 @@ public class TankFrame extends Frame {
                 case KeyEvent.VK_RIGHT:
                     bR=false;
                     break;
+                case KeyEvent.VK_CONTROL:
+                    myTank.fire();
                 default:
                     break;
             }
@@ -87,10 +131,15 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
-            if (bL) myTank.setDir(Dir.LEFT);
-            if (bU) myTank.setDir(Dir.UP);
-            if (bD) myTank.setDir(Dir.DOWN);
-            if (bR) myTank.setDir(Dir.RIGHT);
+            if (!bL && !bU && !bR && !bD){
+                myTank.setMoving(false);
+            }else{
+                myTank.setMoving(true);
+                if (bL) myTank.setDir(Dir.LEFT);
+                if (bU) myTank.setDir(Dir.UP);
+                if (bD) myTank.setDir(Dir.DOWN);
+                if (bR) myTank.setDir(Dir.RIGHT);
+            }
         }
     }
 }
