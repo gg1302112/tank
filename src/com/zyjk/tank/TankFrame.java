@@ -13,8 +13,8 @@ import java.awt.event.WindowEvent;
  * @version: 1.0
  */
 public class TankFrame extends Frame {
-    int x = 200;
-    int y = 200;
+
+    Tank myTank = new Tank(200,200,Dir.DOWN);
 
     public TankFrame(){
         setSize(800,600);
@@ -32,10 +32,7 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
-        g.fillRect(x,y,50,50);
-//        x+=10;
-//        y+=10;
-
+        myTank.paint(g);
     }
 
     class MyKeyListener extends KeyAdapter{
@@ -47,25 +44,53 @@ public class TankFrame extends Frame {
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
             switch (key){
-                case KeyEvent.VK_LEFT:bL=true;break;
-                case KeyEvent.VK_UP:bU=true;break;
-                case KeyEvent.VK_DOWN:bD=true;break;
-                case KeyEvent.VK_RIGHT:bR=true;break;
-                default:break;
+                case KeyEvent.VK_LEFT:
+                    bL=true;
+                    break;
+                case KeyEvent.VK_UP:
+                    bU=true;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    bD=true;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    bR=true;
+                    break;
+                default:
+                    break;
             }
-//            repaint();
+
+            setMainTankDir();
+
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
             int key = e.getKeyCode();
             switch (key){
-                case KeyEvent.VK_LEFT:bL=false;break;
-                case KeyEvent.VK_UP:bU=false;break;
-                case KeyEvent.VK_DOWN:bD=false;break;
-                case KeyEvent.VK_RIGHT:bR=false;break;
-                default:break;
+                case KeyEvent.VK_LEFT:
+                    bL=false;
+                    break;
+                case KeyEvent.VK_UP:
+                    bU=false;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    bD=false;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    bR=false;
+                    break;
+                default:
+                    break;
             }
+            setMainTankDir();
+        }
+
+        private void setMainTankDir() {
+            if (bL) myTank.setDir(Dir.LEFT);
+            if (bU) myTank.setDir(Dir.UP);
+            if (bD) myTank.setDir(Dir.DOWN);
+            if (bR) myTank.setDir(Dir.RIGHT);
         }
     }
 }
