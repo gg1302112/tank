@@ -1,6 +1,7 @@
 package com.zyjk.tank;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * @Auther: lzw
@@ -13,9 +14,28 @@ public class Tank {
     public static int WIDTH = ResourceMgr.tankD.getWidth();
     public static int HEIGHT = ResourceMgr.tankD.getHeight();
     private Dir dir = Dir.DOWN;
+    private Group group = Group.BAD;
+    private Random random = new Random();
     private static final int SPEED = 5;
     private boolean moving = false;
+    private boolean living = true;
     TankFrame tf = null;
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 
     public void setMoving(boolean moving) {
         this.moving = moving;
@@ -29,14 +49,16 @@ public class Tank {
         this.dir = dir;
     }
 
-    public Tank(int x, int y, Dir dir,TankFrame tf) {
+    public Tank(int x, int y, Dir dir,Group group,TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.group = group;
         this.tf = tf;
     }
 
     public void paint(Graphics g) {
+        if (!living) tf.tanks.remove(this);
         switch (dir){
             case DOWN:
                 g.drawImage(ResourceMgr.tankD,x,y,null);
@@ -53,6 +75,9 @@ public class Tank {
                 break;
         }
 
+        if (this.group == Group.BAD && random.nextInt(10)>8){
+            fire();
+        }
         move();
 
         }
@@ -75,11 +100,16 @@ public class Tank {
                 y += SPEED;
                 break;
         }
+
     }
 
     public void fire() {
         int bX = x + this.WIDTH/2 - Bullet.WIDTH/2;
         int bY = y + this.HEIGHT/2 - Bullet.HEIGHT/2;
-        tf.bullets.add(new Bullet(bX,bY,dir,tf));
+        tf.bullets.add(new Bullet(bX,bY,dir,this.group,tf));
+    }
+
+    public void die() {
+        this.living = false;
     }
 }
