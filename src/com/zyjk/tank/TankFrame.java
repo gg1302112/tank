@@ -22,6 +22,7 @@ public class TankFrame extends Frame {
     Tank myTank = new Tank(200,400,Dir.DOWN,Group.GOOD,this);
     List<Bullet> bullets = new ArrayList<>();
     List<Tank> tanks = new ArrayList<>();
+    Explode e = new Explode(100,100,this);
 
     public static int getGameWidth() {
         return GAME_WIDTH;
@@ -87,7 +88,7 @@ public class TankFrame extends Frame {
         g.drawString("当前敌人弹数:"+tanks.size(),10,90);
         g.setColor(color);
 
-
+        e.paint(g);
     }
 
     class MyKeyListener extends KeyAdapter{
