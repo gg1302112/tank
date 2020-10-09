@@ -1,5 +1,6 @@
 package com.zyjk.tank;
 
+import javax.annotation.Resource;
 import java.awt.*;
 
 /**
@@ -10,9 +11,9 @@ import java.awt.*;
  */
 public class Bullet {
     private int x,y;
+    public static int WIDTH = ResourceMgr.bulletD.getWidth();
+    public static int HEIGHT = ResourceMgr.bulletD.getHeight();
     private Dir dir;
-    private static final int WIDTH = 20;
-    private static final int HEIGHT = 20;
     private static final int SPEED = 10;
     private boolean living = true;
     TankFrame tf = null;
@@ -28,10 +29,22 @@ public class Bullet {
 
     public void paint(Graphics g){
         if(!living) tf.bullets.remove(this);
-        Color color = g.getColor();
-        g.setColor(Color.red);
-        g.fillOval(x,y,WIDTH,HEIGHT);
-        g.setColor(color);
+        switch (dir){
+            case LEFT:
+                g.drawImage(ResourceMgr.bulletL,x,y,null);
+                break;
+            case RIGHT:
+                g.drawImage(ResourceMgr.bulletR,x,y,null);
+                break;
+            case UP:
+                g.drawImage(ResourceMgr.bulletU,x,y,null);
+                break;
+            case DOWN:
+                g.drawImage(ResourceMgr.bulletD,x,y,null);
+                break;
+            default:
+                break;
+        }
         move();
     }
 
