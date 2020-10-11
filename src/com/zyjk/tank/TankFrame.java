@@ -17,12 +17,12 @@ import java.util.Random;
  * @version: 1.0
  */
 public class TankFrame extends Frame {
-    private static final int GAME_WIDTH = 800;
-    private static final int GAME_HEIGHT = 600;
+    private static final int GAME_WIDTH = 1200;
+    private static final int GAME_HEIGHT = 800;
     Tank myTank = new Tank(200,400,Dir.DOWN,Group.GOOD,this);
     List<Bullet> bullets = new ArrayList<>();
     List<Tank> tanks = new ArrayList<>();
-    Explode e = new Explode(100,100,this);
+    List<Explode> explodes = new ArrayList<>();
 
     public static int getGameWidth() {
         return GAME_WIDTH;
@@ -75,6 +75,9 @@ public class TankFrame extends Frame {
         for (int i = 0;i<tanks.size();i++){
             tanks.get(i).paint(g);
         }
+        for (int i = 0;i<explodes.size();i++){
+            explodes.get(i).paint(g);
+        }
 
         for (int i = 0;i<bullets.size();i++){
             for (int j=0;j<tanks.size();j++){
@@ -85,10 +88,10 @@ public class TankFrame extends Frame {
         Color color = g.getColor();
         g.setColor(Color.white);
         g.drawString("当前子弹数:"+bullets.size(),10,60);
-        g.drawString("当前敌人弹数:"+tanks.size(),10,90);
+        g.drawString("当前敌人数:"+tanks.size(),10,80);
+        g.drawString("当前爆炸数:"+explodes.size(),10,100);
         g.setColor(color);
 
-        e.paint(g);
     }
 
     class MyKeyListener extends KeyAdapter{

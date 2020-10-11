@@ -11,8 +11,8 @@ import java.awt.*;
  */
 public class Explode {
     private int x,y;
-    public static int WIDTH = ResourceMgr.bulletD.getWidth();
-    public static int HEIGHT = ResourceMgr.bulletD.getHeight();
+    public static int WIDTH = ResourceMgr.explodes[0].getWidth();
+    public static int HEIGHT = ResourceMgr.explodes[0].getHeight();
     private boolean living = true;
     TankFrame tf = null;
     private int step = 0;
@@ -27,7 +27,7 @@ public class Explode {
 
     public void paint(Graphics g){
         g.drawImage(ResourceMgr.explodes[step++],x,y,null);
-        if (step==16) step=0;
+        if (step==16) tf.explodes.remove(this);
     }
 
 

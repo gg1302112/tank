@@ -11,13 +11,13 @@ import java.util.Random;
  */
 public class Tank {
     private int x,y;
-    public static int WIDTH = ResourceMgr.tankD.getWidth();
-    public static int HEIGHT = ResourceMgr.tankD.getHeight();
+    public static int WIDTH = ResourceMgr.goodTankU.getWidth();
+    public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
     private Dir dir = Dir.DOWN;
     private Group group = Group.BAD;
     private Random random = new Random();
     private static final int SPEED = 5;
-    private boolean moving = false;
+    private boolean moving = true;
     private boolean living = true;
     TankFrame tf = null;
 
@@ -61,16 +61,16 @@ public class Tank {
         if (!living) tf.tanks.remove(this);
         switch (dir){
             case DOWN:
-                g.drawImage(ResourceMgr.tankD,x,y,null);
+                g.drawImage(this.group == Group.GOOD?ResourceMgr.goodTankD:ResourceMgr.badTankD,x,y,null);
                 break;
             case UP:
-                g.drawImage(ResourceMgr.tankU,x,y,null);
+                g.drawImage(this.group == Group.GOOD?ResourceMgr.goodTankU:ResourceMgr.badTankU,x,y,null);
                 break;
             case LEFT:
-                g.drawImage(ResourceMgr.tankL,x,y,null);
+                g.drawImage(this.group == Group.GOOD?ResourceMgr.goodTankL:ResourceMgr.badTankL,x,y,null);
                 break;
             case RIGHT:
-                g.drawImage(ResourceMgr.tankR,x,y,null);
+                g.drawImage(this.group == Group.GOOD?ResourceMgr.goodTankR:ResourceMgr.badTankR,x,y,null);
             default:
                 break;
         }
@@ -86,6 +86,7 @@ public class Tank {
         if (!moving){
             return;
         }
+
         switch (dir) {
             case LEFT:
                 x -= SPEED;
@@ -100,7 +101,30 @@ public class Tank {
                 y += SPEED;
                 break;
         }
+        if (this.group==Group.BAD&&random.nextInt(100)>95){
+            randomDir();
+        }
+        boundsCheck();
 
+    }
+
+    private void boundsCheck() {
+        if (x<0){
+            x=2;
+        }
+        if (x>TankFrame.getGameWidth()- Tank.WIDTH-2){
+            x = TankFrame.getGameWidth() - Tank.WIDTH-2;
+        }
+        if (y<28){
+            y=28;
+        }
+        if (y>TankFrame.getGameHeight() - Tank.HEIGHT-2){
+            y = TankFrame.getGameHeight()-Tank.HEIGHT-2;
+        }
+    }
+
+    private void randomDir() {
+        dir = Dir.values()[random.nextInt(4)];
     }
 
     public void fire() {
