@@ -1,5 +1,7 @@
 package com.zyjk.tank;
 
+import org.w3c.dom.css.Rect;
+
 import javax.annotation.Resource;
 import java.awt.*;
 
@@ -18,6 +20,7 @@ public class Bullet {
     private static final int SPEED = 10;
     private boolean living = true;
     TankFrame tf = null;
+    Rectangle rect = new Rectangle();
 
 
 
@@ -27,6 +30,11 @@ public class Bullet {
         this.dir = dir;
         this.group = group;
         this.tf = tf;
+
+        rect.x = x;
+        rect.y = y;
+        rect.height=HEIGHT;
+        rect.width= WIDTH;
     }
 
     public void paint(Graphics g){
@@ -65,16 +73,20 @@ public class Bullet {
                 y += SPEED;
                 break;
         }
-
+        rect.x = x;
+        rect.y = y;
         if (x<0 || x>tf.getGameWidth() || y<0 || y>tf.getGameHeight()) living=false;
+
+
     }
 
 
     public void collideWith(Tank tank) {
         if (this.group == tank.getGroup()){ return;}
-        Rectangle rect1 = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
-        Rectangle rect2 = new Rectangle(tank.getX(),tank.getY(),tank.WIDTH,tank.HEIGHT);
-        if (rect1.intersects(rect2)){
+//        Rectangle rect1 = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
+//        Rectangle rect2 = new Rectangle(tank.getX(),tank.getY(),tank.WIDTH,tank.HEIGHT);
+
+        if (this.rect.intersects(tank.rect)){
             tank.die();
             this.die();
             int eX = tank.getX() + tank.WIDTH/2 - Explode.WIDTH/2;

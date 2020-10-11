@@ -1,5 +1,6 @@
 package com.zyjk.tank;
 
+import javax.xml.bind.annotation.XmlList;
 import java.awt.*;
 import java.util.Random;
 
@@ -20,6 +21,7 @@ public class Tank {
     private boolean moving = true;
     private boolean living = true;
     TankFrame tf = null;
+    Rectangle rect = new Rectangle();
 
     public int getX() {
         return x;
@@ -55,6 +57,11 @@ public class Tank {
         this.dir = dir;
         this.group = group;
         this.tf = tf;
+
+        rect.x = x;
+        rect.y = y;
+        rect.width=WIDTH;
+        rect.height=HEIGHT;
     }
 
     public void paint(Graphics g) {
@@ -105,7 +112,8 @@ public class Tank {
             randomDir();
         }
         boundsCheck();
-
+        rect.x = x;
+        rect.y = y;
     }
 
     private void boundsCheck() {
